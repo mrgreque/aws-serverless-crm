@@ -3,7 +3,7 @@ org: awscrm
 # "app" enables Serverless Framework Dashboard features and sharing them with other Services.
 app: crm-data
 # "service" is the name of this project. This will also be added to your AWS resource names.
-service: crm-data
+service: crm-data-staging
 
 provider:
   name: aws
@@ -14,7 +14,7 @@ provider:
         - s3:PutObject
         - s3:GetObject
         - s3:ListBucket
-      Resource: arn:aws:s3:::crm-data-erp-to-crm-bucket/*
+      Resource: arn:aws:s3:::crm-data-staging-erp-to-crm-bucket/*
 
 functions:
   data_process:
@@ -34,7 +34,7 @@ functions:
       S3_SECRET_ACCESS_KEY: ${env:S3_SECRET_ACCESS_KEY}
     events:
       - s3:
-          bucket: crm-data-erp-to-crm-bucket
+          bucket: crm-data-staging-erp-to-crm-bucket
           event: s3:ObjectCreated:*
           rules:
             - prefix: transformed_erp_data

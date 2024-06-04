@@ -19,6 +19,7 @@ Este projeto tem como objetivo integrar um ERP com um CRM, utilizando o conceito
 
 Para rodar o projeto, é necessário ter um usuário na AWS com as seguintes permissões:
 
+- AmazonAPIGatewayAdministrator
 - AmazonAPIGatewayInvokeFullAccess
 - AmazonS3FullAccess
 - AWSCloudFormationFullAccess
@@ -141,6 +142,10 @@ Uma resposta semelhante a esta deve ser retornada:
   }
 }
 ```
+
+É possível verificar os arquivos gerados no S3, e verificar se os dados foram armazenados corretamente. Assim como acompanhar o log do lambda no CloudWatch.
+
+O segundo lambda, `read_data`, irá ler os dados do S3 e integrá-los com o CRM. Ele será executado automaticamente após o primeiro lambda ser executado. Portando não é necessário fazer uma requisição para ele, basta aguardar a execução, e acessar o CloudWatch para verificar o log.
 
 ## Referências
 

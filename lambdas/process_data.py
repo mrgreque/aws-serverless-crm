@@ -29,7 +29,7 @@ def process_data(event, context):
 
     # save data to S3
     try:
-        s3 = S3('crm-data-erp-to-crm-bucket')
+        s3 = S3('crm-data-staging-erp-to-crm-bucket')
 
         # save ERP data to S3
         s3.upload(json.dumps(erp_data), 'erp_data.json')
