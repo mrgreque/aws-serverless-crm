@@ -1,0 +1,41 @@
+# "org" ensures this Service is used with the correct Serverless Framework Access Key.
+org: awscrm
+# "app" enables Serverless Framework Dashboard features and sharing them with other Services.
+app: crm-data
+# "service" is the name of this project. This will also be added to your AWS resource names.
+service: crm-data
+
+provider:
+  name: aws
+  runtime: python3.12
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - s3:PutObject
+        - s3:GetObject
+        - s3:ListBucket
+      Resource: arn:aws:s3:::crm-data-erp-to-crm-bucket/*
+
+functions:
+  data_process:
+    handler: handler.process_data_handler
+    environment:
+      S3_ACCESS_KEY: ${env:S3_ACCESS_KEY}
+      S3_SECRET_ACCESS_KEY: ${env:S3_SECRET_ACCESS_KEY}
+    events:
+      - http:
+          path: crm/process-data
+          method: post
+          cors: true
+  read_data:
+    handler: handler.read_data_handler
+    environment:
+      S3_ACCESS_KEY: ${env:S3_ACCESS_KEY}
+      S3_SECRET_ACCESS_KEY: ${env:S3_SECRET_ACCESS_KEY}
+    events:
+      - s3:
+          bucket: crm-data-erp-to-crm-bucket
+          event: s3:ObjectCreated:*
+          rules:
+            - prefix: transformed_erp_data
+            - suffix: .json
